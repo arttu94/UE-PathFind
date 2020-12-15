@@ -17,6 +17,9 @@ APathNode::APathNode()
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
 	RootComponent = StaticMeshComp;
 
+	AditMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Aditional Mesh Component"));
+	AditMeshComp->SetupAttachment(StaticMeshComp);
+
 	Weight = 1;
 	Graph = nullptr;
 	SetCameFrom(nullptr);
@@ -96,26 +99,19 @@ void APathNode::UpdateNodeType()
 	case EPathNodeType::PN_Undefined:
 		break;
 	case EPathNodeType::PN_Open:
-		loc.Z = 0.f;
-		SetActorLocation(loc);
-		if (OpenNodeMaterial)
-			StaticMeshComp->SetMaterial(0, OpenNodeMaterial);
+		AditMeshComp->SetStaticMesh(nullptr);
+		//AditMeshComp->SetStaticMesh(FMath::RandBool() ? ClearMesh : ClearMeshAlt);
 		break;
 	case EPathNodeType::PN_Closed:
-		loc.Z = 90.f;
-		SetActorLocation(loc);
+		AditMeshComp->SetStaticMesh(FMath::RandBool() ? RockMesh : RockMeshAlt);
 		CameFrom = nullptr;
-		if(ClosedNodeMaterial)
-			StaticMeshComp->SetMaterial(0, ClosedNodeMaterial);
 		break;
 	case EPathNodeType::PN_Start:
+		AditMeshComp->SetStaticMesh(StartMesh);
 		Weight = 0;
-		if (StartNodeMaterial)
-			StaticMeshComp->SetMaterial(0, StartNodeMaterial);
 		break;
 	case EPathNodeType::PN_Finish:
-		if (FinishNodeMaterial)
-			StaticMeshComp->SetMaterial(0, FinishNodeMaterial);
+		AditMeshComp->SetStaticMesh(FinishMesh);
 		break;
 	default:
 		break;

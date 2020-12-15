@@ -23,6 +23,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void BeginDestroy() override;
+
+	void CreateGrid();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Node Spawning")
 	TSubclassOf<APathNode> NodeBlueprintClass;
 
@@ -30,7 +34,10 @@ public:
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
 
-	const int32 SquareSize = 15;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Path Finding")
+	int SquareSize = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Path Finding")
 	bool bAllowDiagonalMovement;
